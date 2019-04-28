@@ -1,8 +1,12 @@
+import { DeleteAdventurerAction, UpdateAdventurerAction } from './../actions/party.actions';
+import { Store, select } from '@ngrx/store';
 import { AdventurerClass } from './../../models/adventurer-class/adventurer-class.type';
 import { Adventurer } from './../../models/adventurer/adventurer.type';
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Dictionary } from 'src/app/utils/dictionary.type';
 import { map, reduce } from 'lodash-es';
+import { getAdventurerClasses, getAdventurerClassDict } from '../state/adventurer-classes.state';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-adventurer-row',
@@ -20,7 +24,14 @@ export class AdventurerRowComponent implements OnChanges {
   classString: string;
   health: number;
 
-  constructor() {
+  // NOTE: should not get directly from store, should use container according to ngRx pattern
+  constructor(private store: Store<any>) {
+    this.store.pipe(
+      select(getAdventurerClassDict),
+      take(1)
+    ).subscribe((classDict) => {
+      this.classDict = classDict;
+    });
   }
 
   ngOnChanges({ adventurer }: SimpleChanges) {
@@ -44,9 +55,14 @@ export class AdventurerRowComponent implements OnChanges {
   }
 
   levelUp() {
+    this.store.dispatch(new UpdateAdventurerAction({
+      ...this.adventurer,
+      level: this.adventurer.level + 1,
+    }));
   }
 
   deleteAdventurer() {
+    this.store.dispatch(new DeleteAdventurerAction(this.adventurer));
   }
 
 }
