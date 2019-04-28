@@ -1,0 +1,9 @@
+<section>
+  <h1>Party Management</h1>
+  <app-adventurer-row *ngFor="let adventurer of adventurers$ | async" [adventurer]="adventurer"></app-adventurer-row>
+</section>
+
+<section>
+  <h1>Add a Party Member</h1>
+  <app-adventurer-form></app-adventurer-form>
+</section>

@@ -1,8 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { RouterModule, Route } from '@angular/router';
+
+const routes: Route[] = [
+  {
+    path: '',
+    loadChildren: './party-management/party-management.module#PartyManagementModule',
+  },
+];
 
 @NgModule({
   declarations: [
@@ -10,7 +17,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    RouterModule.forRoot(routes),
   ],
   providers: [],
   bootstrap: [AppComponent]

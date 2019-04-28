@@ -1,0 +1,20 @@
+<form (ngSubmit)="createAdventurer()" [formGroup]="formGroup">
+  <label>
+    Name
+    <input type="text" name="name" formControlName="name" />
+  </label>
+  <label>
+    Class
+    <select type="text" name="class" formControlName="class">
+      <option [value]="adventurerClass.id" *ngFor="let adventurerClass of adventurerClasses$ | async">
+        {{adventurerClass.title}}
+      </option>
+    </select>
+  </label>
+  <label>
+    Level
+    <input type="number" name="level" formControlName="level" />
+  </label>
+
+  <button type="submit">Add Adventurer</button>
+</form>

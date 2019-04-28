@@ -1,0 +1,19 @@
+<div class="adventurer-row">
+  <div>
+    {{adventurer.name}} {{adventurer.level}}
+  </div>
+  <div>
+    {{classString}}
+  </div>
+  <div>
+    {{health}} HP
+  </div>
+
+  <button (click)="levelUp()">
+    Level Up
+  </button>
+
+  <button (click)="deleteAdventurer()">
+    x
+  </button>
+</div>
