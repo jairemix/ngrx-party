@@ -4,7 +4,7 @@
 //   props<{ adventurer: Adventurer }>(),
 // );
 
-import { Adventurer } from '../../models/adventurer/adventurer.type';
+import { Adventurer } from '../models/adventurer/adventurer.type';
 import { Action } from '@ngrx/store';
 
 export enum PartyActionsEnum {

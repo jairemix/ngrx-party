@@ -1,7 +1,7 @@
-import { Adventurer } from 'src/app/models/adventurer/adventurer.type';
+import { Adventurer } from 'src/app/party-management/models/adventurer/adventurer.type';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { PartyActionsUnion, PartyActionsEnum } from '../actions/party.actions';
-import { defaultAdventurers } from 'src/app/models/adventurer/default-adventurers';
+import { defaultAdventurers } from 'src/app/party-management/models/adventurer/default-adventurers';
 import { filter, findIndex } from 'lodash-es';
 
 export interface PartyState {

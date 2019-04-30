@@ -1,7 +1,7 @@
 import { DeleteAdventurerAction, UpdateAdventurerAction } from './../actions/party.actions';
 import { Store, select } from '@ngrx/store';
-import { AdventurerClass } from './../../models/adventurer-class/adventurer-class.type';
-import { Adventurer } from './../../models/adventurer/adventurer.type';
+import { AdventurerClass } from '../models/adventurer-class/adventurer-class.type';
+import { Adventurer } from '../models/adventurer/adventurer.type';
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Dictionary } from 'src/app/utils/dictionary.type';
 import { map, reduce } from 'lodash-es';

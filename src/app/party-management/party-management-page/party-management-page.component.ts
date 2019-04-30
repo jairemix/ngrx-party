@@ -1,7 +1,7 @@
 import { getAdventurers } from './../state/party.state';
 import { Store, select } from '@ngrx/store';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Adventurer } from 'src/app/models/adventurer/adventurer.type';
+import { Adventurer } from 'src/app/party-management/models/adventurer/adventurer.type';
 import { Observable } from 'rxjs';
 
 @Component({

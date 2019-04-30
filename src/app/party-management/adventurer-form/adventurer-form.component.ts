@@ -4,7 +4,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { mapValues } from 'lodash-es';
 import { Dictionary } from 'src/app/utils/dictionary.type';
-import { AdventurerClass } from 'src/app/models/adventurer-class/adventurer-class.type';
+import { AdventurerClass } from 'src/app/party-management/models/adventurer-class/adventurer-class.type';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';

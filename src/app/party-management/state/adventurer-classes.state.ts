@@ -1,6 +1,6 @@
-import { AdventurerClass } from '../../models/adventurer-class/adventurer-class.type';
+import { AdventurerClass } from '../models/adventurer-class/adventurer-class.type';
 import { Action, createFeatureSelector, createSelector } from '@ngrx/store';
-import { adventurerClasses } from 'src/app/models/adventurer-class/adventurer-classes.const';
+import { adventurerClasses } from 'src/app/party-management/models/adventurer-class/adventurer-classes.const';
 import { keyBy } from 'lodash-es';
 
 export interface AdventurerClassState {
