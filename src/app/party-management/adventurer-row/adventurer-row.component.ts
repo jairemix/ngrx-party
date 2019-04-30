@@ -1,12 +1,8 @@
-import { DeleteAdventurerAction, UpdateAdventurerAction } from './../actions/party.actions';
-import { Store, select } from '@ngrx/store';
 import { AdventurerClass } from '../models/adventurer-class/adventurer-class.type';
 import { Adventurer } from '../models/adventurer/adventurer.type';
-import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
 import { Dictionary } from 'src/app/utils/dictionary.type';
 import { map, reduce } from 'lodash-es';
-import { getAdventurerClasses, getAdventurerClassDict } from '../state/adventurer-classes.state';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-adventurer-row',
@@ -17,22 +13,14 @@ import { take } from 'rxjs/operators';
 export class AdventurerRowComponent implements OnChanges {
 
   @Input() adventurer: Adventurer;
-  private classDict: Dictionary<AdventurerClass>;
+  @Input() classDict: Dictionary<AdventurerClass>;
+  @Output() levelUp = new EventEmitter();
+  @Output() deleteAdventurer = new EventEmitter();
 
   // derived values
   classes: AdventurerClass[];
   classString: string;
   health: number;
-
-  // NOTE: should not get directly from store, should use container according to ngRx pattern
-  constructor(private store: Store<any>) {
-    this.store.pipe(
-      select(getAdventurerClassDict),
-      take(1)
-    ).subscribe((classDict) => {
-      this.classDict = classDict;
-    });
-  }
 
   ngOnChanges({ adventurer }: SimpleChanges) {
     const current = adventurer.currentValue as Adventurer;
@@ -52,17 +40,6 @@ export class AdventurerRowComponent implements OnChanges {
     this.health = Math.round(reduce(this.classes, (total, adventurerClass) => {
       return total + adventurerClass.calculateHealth(level);
     }, 0) / this.classes.length);
-  }
-
-  levelUp() {
-    this.store.dispatch(new UpdateAdventurerAction({
-      ...this.adventurer,
-      level: this.adventurer.level + 1,
-    }));
-  }
-
-  deleteAdventurer() {
-    this.store.dispatch(new DeleteAdventurerAction(this.adventurer));
   }
 
 }

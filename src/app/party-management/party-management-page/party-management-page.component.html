@@ -1,9 +1,17 @@
 <section>
   <h1>Party Management</h1>
-  <app-adventurer-row *ngFor="let adventurer of adventurers$ | async" [adventurer]="adventurer"></app-adventurer-row>
+  <app-adventurer-row *ngFor="let adventurer of adventurers$ | async"
+    [adventurer]="adventurer"
+    [classDict]="classDict$ | async"
+    (levelUp)="levelUp(adventurer)"
+    (deleteAdventurer)="deleteAdventurer(adventurer)">
+  </app-adventurer-row>
 </section>
 
 <section>
   <h1>Add a Party Member</h1>
-  <app-adventurer-form></app-adventurer-form>
+  <app-adventurer-form
+    [adventurerClasses]="adventurerClasses$ | async"
+    (shouldSubmit)="createAdventurer($event)">
+  </app-adventurer-form>
 </section>

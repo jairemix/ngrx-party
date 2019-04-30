@@ -1,13 +1,9 @@
-import { CreateAdventurerAction } from './../actions/party.actions';
-import { getAdventurerClasses } from './../state/adventurer-classes.state';
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { mapValues } from 'lodash-es';
 import { Dictionary } from 'src/app/utils/dictionary.type';
 import { AdventurerClass } from 'src/app/party-management/models/adventurer-class/adventurer-class.type';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
+import { Adventurer } from '../models/adventurer/adventurer.type';
 
 interface AdventurerFormData {
   name: string;
@@ -21,26 +17,16 @@ interface AdventurerFormData {
   styleUrls: ['./adventurer-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdventurerFormComponent implements OnInit, OnDestroy {
+export class AdventurerFormComponent implements OnInit {
 
   formGroup: FormGroup;
   formControls: Dictionary<AbstractControl>;
   defaults: AdventurerFormData;
 
-  adventurerClasses$: Observable<AdventurerClass[]>;
-  adventurerClasses: AdventurerClass[] = [];
+  @Input() adventurerClasses: AdventurerClass[];
+  @Output() shouldSubmit = new EventEmitter<Adventurer>();
 
-  private destroyed$ = new Subject<void>();
-
-  // NOTE: should not get directly from store, should use container according to ngRx pattern
-  constructor(private store: Store<any>) {
-
-    this.adventurerClasses$ = this.store.pipe(select(getAdventurerClasses));
-
-    this.adventurerClasses$.pipe(
-      takeUntil(this.destroyed$),
-    ).subscribe((a) => this.adventurerClasses = a);
-
+  ngOnInit() {
     this.formGroup = new FormGroup({
       name: new FormControl('', [Validators.required]),
       class: new FormControl(this.adventurerClasses[0] && this.adventurerClasses[0].id, [Validators.required]),
@@ -50,31 +36,24 @@ export class AdventurerFormComponent implements OnInit, OnDestroy {
     this.defaults = mapValues(this.formControls, 'value') as any;
   }
 
-  ngOnInit() {
-  }
-
-  createAdventurer() {
+  submit() {
     if (!this.formGroup.valid) {
       alert('invalid');
       return;
     }
     const formData = this.formGroup.value as AdventurerFormData;
-    this.store.dispatch(new CreateAdventurerAction({
+    this.shouldSubmit.emit({
       name: formData.name,
       classes: [formData.class],
       level: formData.level,
       id: null,
-    }));
+    });
+    this.clear();
   }
 
   clear() {
     this.formGroup.reset();
     this.formGroup.setValue(this.defaults);
-  }
-
-  ngOnDestroy() {
-    this.destroyed$.next();
-    this.destroyed$.complete();
   }
 
 }
