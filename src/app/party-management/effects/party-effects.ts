@@ -1,23 +1,70 @@
+import { PartyStateModel } from './../state/party.state';
+import { Store } from '@ngrx/store';
+import {
+  PartyActionsEnum,
+  LoadPartyAction,
+  PersistPartyAction,
+  PersistPartySuccessAction,
+  PersistPartyErrorAction
+} from './../actions/party.actions';
+import { PartyService } from './../services/party.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { mergeMap } from 'rxjs/operators';
+import { map as mapRx, catchError, mergeMap, withLatestFrom, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { defaultPartyStateModel, getPartyState } from '../state/party.state';
+import { LoadPartySuccessAction } from '../actions/party.actions';
+import { omit } from 'lodash-es';
 
 // new syntax -> createEffect
 
 @Injectable()
 export class PartyEffects {
 
-  // @Effect()
-  // loadMovies$ = this.actions$.pipe(
-  //   ofType('[Movies Page] Load Movies'),
-  //   mergeMap(() => this.moviesService.getAll().pipe(
-  //     map(movies => ({ type: '[Movies API] Movies Loaded Success', payload: movies })),
-  //     catchError(() => EMPTY)
-  //   )),
-  // );
+  @Effect()
+  loadParty$ = this.actions$.pipe(
+    ofType(PartyActionsEnum.LoadParty),
+    mergeMap((_: LoadPartyAction) => this.partyService.getParty().pipe(
+      mapRx(party => new LoadPartySuccessAction(party || defaultPartyStateModel)),
+      catchError(() => of(new LoadPartySuccessAction(defaultPartyStateModel))),
+    )),
+  );
+
+  @Effect()
+  persistParty$ = this.actions$.pipe(
+    ofType(PartyActionsEnum.PersistParty),
+    withLatestFrom(this.store.select(getPartyState)),
+    switchMap(([_, partyStateModel]: [PersistPartyAction, PartyStateModel]) => {
+      // switchMap because we want to persist only the latest state
+      const toPersist = omit(partyStateModel, 'loaded', 'loadError', 'persistError');
+      return this.partyService.setParty(toPersist).pipe(
+        mapRx(__ => new PersistPartySuccessAction()),
+        catchError((e) => of(new PersistPartyErrorAction(e))),
+      );
+    }),
+  );
+
+  @Effect()
+  createAdventurer$ = this.actions$.pipe(
+    ofType(PartyActionsEnum.CreateAdventurer),
+    mapRx(() => new PersistPartyAction()),
+  );
+
+  @Effect()
+  updateAdventurer$ = this.actions$.pipe(
+    ofType(PartyActionsEnum.UpdateAdventurer),
+    mapRx(() => new PersistPartyAction()),
+  );
+
+  @Effect()
+  deleteAdventurer$ = this.actions$.pipe(
+    ofType(PartyActionsEnum.DeleteAdventurer),
+    mapRx(() => new PersistPartyAction()),
+  );
 
   constructor(
     private actions$: Actions,
-    // private service: Service
+    private store: Store<any>,
+    private partyService: PartyService,
   ) {}
 }

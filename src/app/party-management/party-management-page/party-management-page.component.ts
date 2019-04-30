@@ -1,3 +1,4 @@
+import { LoadPartyAction } from './../actions/party.actions';
 import { getAdventurers } from './../state/party.state';
 import { Store, select } from '@ngrx/store';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
@@ -15,6 +16,8 @@ export class PartyManagementPageComponent implements OnInit {
 
   constructor(private store: Store<any>) {
     this.adventurers$ = this.store.pipe(select(getAdventurers));
+
+    this.store.dispatch(new LoadPartyAction());
     // console.log('adventurers$', this.store.select(state => state.party.adventurers));
   }
 

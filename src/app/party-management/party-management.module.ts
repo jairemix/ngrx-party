@@ -10,6 +10,7 @@ import { StoreModule } from '@ngrx/store';
 import { adventurerClassesReducer } from './state/adventurer-classes.state';
 import { partyReducer } from './state/party.state';
 import { EffectsModule } from '@ngrx/effects';
+import { PartyService } from './services/party.service';
 
 const routes: Route[] = [
   {
@@ -37,6 +38,9 @@ const routes: Route[] = [
     PartyManagementPageComponent,
     AdventurerRowComponent,
     AdventurerFormComponent,
+  ],
+  providers: [
+    PartyService,
   ],
   exports: [
   ],
