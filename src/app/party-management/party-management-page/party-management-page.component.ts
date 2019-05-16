@@ -1,5 +1,4 @@
 import { Dictionary } from './../../utils/dictionary.type';
-import { LoadPartyAction, UpdateAdventurerAction, DeleteAdventurerAction, CreateAdventurerAction } from './../actions/party.actions';
 import { Store, select } from '@ngrx/store';
 import { Component, OnInit, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import { Adventurer } from 'src/app/party-management/models/adventurer/adventurer.type';
@@ -11,6 +10,7 @@ import { AsyncState } from '../state/party.state';
 import { CanDeactivate } from '@angular/router';
 import { take, map as mapRx } from 'rxjs/operators';
 import { getSnapshot } from 'src/app/utils/get-snapshot';
+import { loadParty, updateAdventurer, deleteAdventurer, createAdventurer } from '../actions/party.actions';
 
 @Component({
   selector: 'app-party-management-page',
@@ -37,22 +37,28 @@ export class PartyManagementPageComponent implements OnInit, CanDeactivate<Party
   }
 
   ngOnInit() {
-    this.store.dispatch(new LoadPartyAction());
+    this.store.dispatch(loadParty());
   }
 
   levelUp(adventurer: Adventurer) {
-    this.store.dispatch(new UpdateAdventurerAction({
-      ...adventurer,
-      level: adventurer.level + 1,
+    this.store.dispatch(updateAdventurer({
+      adventurer: {
+        ...adventurer,
+        level: adventurer.level + 1,
+      }
     }));
   }
 
   deleteAdventurer(adventurer: Adventurer) {
-    this.store.dispatch(new DeleteAdventurerAction(adventurer));
+    this.store.dispatch(deleteAdventurer({
+      adventurer,
+    }));
   }
 
   createAdventurer(adventurer: Adventurer) {
-    this.store.dispatch(new CreateAdventurerAction(adventurer));
+    this.store.dispatch(createAdventurer({
+      adventurer,
+    }));
   }
 
   canDeactivate() {

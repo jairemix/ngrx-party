@@ -17,13 +17,9 @@ export interface PartyState extends PersistedPartyState {
   persistState: AsyncState;
 }
 
-export const defaultLoadedPartyState: PartyState = {
+export const defaultLoadedPartyState: PersistedPartyState = {
   adventurers: defaultAdventurers,
   nextID: defaultAdventurers.length + 1,
-  loadState: {
-    done: true,
-  },
-  persistState: {},
 };
 
 export const nonPersistedKeys = ['loadState', 'persistState'] as const;
