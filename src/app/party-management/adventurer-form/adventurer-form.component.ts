@@ -11,6 +11,8 @@ interface AdventurerFormData {
   class: string;
 }
 
+type FormFields = keyof AdventurerFormData;
+
 @Component({
   selector: 'app-adventurer-form',
   templateUrl: './adventurer-form.component.html',
@@ -20,7 +22,7 @@ interface AdventurerFormData {
 export class AdventurerFormComponent implements OnInit {
 
   formGroup: FormGroup;
-  formControls: Dictionary<AbstractControl>;
+  formControls: Dictionary<AbstractControl, FormFields>;
   defaults: AdventurerFormData;
 
   @Input() adventurerClasses: AdventurerClass[];
@@ -32,7 +34,7 @@ export class AdventurerFormComponent implements OnInit {
       class: new FormControl(this.adventurerClasses[0] && this.adventurerClasses[0].id, [Validators.required]),
       level: new FormControl(1, [Validators.required]),
     });
-    this.formControls = this.formGroup.controls;
+    this.formControls = this.formGroup.controls as any;
     this.defaults = mapValues(this.formControls, 'value') as any;
   }
 

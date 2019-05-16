@@ -1,0 +1,11 @@
+<section>
+  <div *ngIf="persistState.done">
+    Saved ✔️
+  </div>
+  <div *ngIf="persistState.pending">
+    Saving ⏱
+  </div>
+  <div *ngIf="persistState.error">
+    Save Error ❌ {{persistState.error}}
+  </div>
+</section>

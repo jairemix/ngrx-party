@@ -1,10 +1,7 @@
 import {
-  createSelector,
-  createFeatureSelector,
   ActionReducer,
   MetaReducer,
   Action,
-  combineReducers,
   ActionReducerMap,
 } from '@ngrx/store';
 import { environment } from '../environments/environment';

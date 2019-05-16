@@ -1,4 +1,4 @@
-import { PartyStateModel } from './../state/party.state';
+import { PartyState } from './../state/party.state';
 // NOTE: new syntax (to use with createReducer in ngrx 8)
 // export const createAdventurer = createAction(
 //   '[Party Management] Create Adventurer',
@@ -27,7 +27,8 @@ export class LoadPartyAction implements Action {
 
 export class LoadPartySuccessAction implements Action {
   readonly type = PartyActionsEnum.LoadPartySuccess;
-  constructor(public payload: PartyStateModel) {}
+  party: PartyState;
+  constructor(public payload: PartyState) {}
 }
 
 export class LoadPartyErrorAction implements Action {

@@ -1,17 +1,33 @@
-<section>
-  <h1>Party Management</h1>
-  <app-adventurer-row *ngFor="let adventurer of adventurers$ | async"
-    [adventurer]="adventurer"
-    [classDict]="classDict$ | async"
-    (levelUp)="levelUp(adventurer)"
-    (deleteAdventurer)="deleteAdventurer(adventurer)">
-  </app-adventurer-row>
-</section>
+<ng-container *ngIf="!(loadState$ | async).done">
+  <app-load-status [loadState]="loadState$ | async"></app-load-status>
+</ng-container>
 
-<section>
-  <h1>Add a Party Member</h1>
-  <app-adventurer-form
-    [adventurerClasses]="adventurerClasses$ | async"
-    (shouldSubmit)="createAdventurer($event)">
-  </app-adventurer-form>
-</section>
+<ng-container *ngIf="(loadState$ | async).done">
+
+  <app-persist-status [persistState]="persistState$ | async"></app-persist-status>
+
+  <section>
+    <h1>Party Management</h1>
+    <app-adventurer-row *ngFor="let adventurer of adventurers$ | async"
+      [adventurer]="adventurer"
+      [classDict]="classDict$ | async"
+      (levelUp)="levelUp(adventurer)"
+      (deleteAdventurer)="deleteAdventurer(adventurer)">
+    </app-adventurer-row>
+  </section>
+  
+  <section>
+    <h1>Add a Party Member</h1>
+    <app-adventurer-form
+      [adventurerClasses]="adventurerClasses$ | async"
+      (shouldSubmit)="createAdventurer($event)">
+    </app-adventurer-form>
+  </section>
+
+  <section>
+    <h1>Test Section</h1>
+    <p>This button is only to test the deactivation guard for this page (when persist state is pending)</p>
+    <button [routerLink]="['/second-page']">Second Page</button>
+  </section>
+
+</ng-container>

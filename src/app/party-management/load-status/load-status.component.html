@@ -1,0 +1,8 @@
+<section>
+  <div *ngIf="loadState.pending">
+    Loading ⏱
+  </div>
+  <div *ngIf="loadState.error">
+    Load Error ❌ {{loadState.error}}
+  </div>
+</section>

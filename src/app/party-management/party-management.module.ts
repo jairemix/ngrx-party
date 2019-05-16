@@ -7,16 +7,27 @@ import { AdventurerRowComponent } from './adventurer-row/adventurer-row.componen
 import { AdventurerFormComponent } from './adventurer-form/adventurer-form.component';
 import { RouterModule, Route } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { adventurerClassesReducer } from './state/adventurer-classes.state';
-import { partyReducer } from './state/party.state';
 import { EffectsModule } from '@ngrx/effects';
 import { PartyService } from './services/party.service';
+import { partyReducer } from './reducers/party.reducer';
+import { adventurerClassesReducer } from './reducers/adventurer-classes.reducer';
+import { delayService } from '../utils/service-decorators/delay-service';
+import { LoadStatusComponent } from './load-status/load-status.component';
+import { PersistStatusComponent } from './persist-status/persist-status.component';
+import { SecondPageComponent } from './second-page/second-page.component';
+import { DelegatingDeactivateGuard } from '../utils/delegating-deactivate-guard';
+import { errorOutService } from '../utils/service-decorators/error-out-service';
 
 const routes: Route[] = [
   {
     path: '',
     component: PartyManagementPageComponent,
-  }
+    canDeactivate: [DelegatingDeactivateGuard],
+  },
+  {
+    path: 'second-page',
+    component: SecondPageComponent,
+  },
 ];
 
 @NgModule({
@@ -38,9 +49,41 @@ const routes: Route[] = [
     PartyManagementPageComponent,
     AdventurerRowComponent,
     AdventurerFormComponent,
+    LoadStatusComponent,
+    PersistStatusComponent,
+    SecondPageComponent,
   ],
   providers: [
-    PartyService,
+
+    /**
+     * normal service
+     */
+    // {
+    //   provide: PartyService,
+    //   useClass: PartyService,
+    // },
+
+    /**
+     * delayed party service
+     */
+    {
+      provide: PartyService,
+      deps: [],
+      useFactory: () => delayService({ getParty: 1000, setParty: 1000 }, new PartyService()),
+    },
+
+    /**
+     * delayed party service with error
+     */
+    // {
+    //   provide: PartyService,
+    //   deps: [],
+    //   useFactory: () => {
+    //     return delayService({ getParty: 1000, setParty: 1000 },
+    //       errorOutService({ setParty: 'Test Error' }, new PartyService()),
+    //     );
+    //   },
+    // }
   ],
   exports: [
   ],
